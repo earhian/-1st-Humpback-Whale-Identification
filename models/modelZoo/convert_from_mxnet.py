@@ -14,19 +14,12 @@ except ImportError:
 
 
 def _convert_bn(k):
-    aux = False
-    if k == 'bias':
-        add = 'beta'
-    elif k == 'weight':
-        add = 'gamma'
-    elif k == 'running_mean':
-        aux = True
-        add = 'moving_mean'
-    elif k == 'running_var':
-        aux = True
-        add = 'moving_var'
-    else:
-        assert False
+    aux = k in ('running_mean', 'running_var')
+    add = {'bias': 'beta',
+           'weight': 'gamma',
+           'running_mean': 'moving_mean',
+           'running_var': 'moving_var'}.get(k)
+    assert add, "Invalid: {}".format(k)
     return aux, add
 
 
